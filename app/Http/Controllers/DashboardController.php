@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use App\Models\PaymentPlatform;
+use App\Resolvers\PaymentPlatformResolver;
 use App\Services\PaypalService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+
+    protected $paymentPlatformResolver;
+
+    public function __construct(PaymentPlatformResolver $paymentPlatformResolver)
+    {
+        $this->paymentPlatformResolver = $paymentPlatformResolver;
+    }
+
     public function index()
     {
         $currencies = Currency::all();
@@ -27,16 +36,26 @@ class DashboardController extends Controller
             'payment_platform' => ['required', 'exists:payment_platforms,id'],
         ]);
 
-        $paymentPlatform = resolve(PaypalService::class);
+        $paymentPlatform = $this->paymentPlatformResolver
+            ->resolveService($request->payment_platform);
+
+        session()->put('paymentPlatformId', $request->payment_platform);
+        if ($request->user()->hasActiveSubscription()) {
+            $request->value = round($request->value * 0.9, 2);
+        }
 
         return $paymentPlatform->handlePayment($request);
     }
 
     public function approval()
     {
-        $paymentPlatform = resolve(PaypalService::class);
+        if (session()->has('paymentPlatformId')) {
+            $paymentPlatform = $this->paymentPlatformResolver
+                ->resolveService(session()->get('paymentPlatformId'));
 
-        return $paymentPlatform->handleApproval();
+            return $paymentPlatform->handleApproval();
+        }
+        return to_route('dashboard')->withErrors('we cannot retrive the peymant');
     }
 
     public function cancelled()

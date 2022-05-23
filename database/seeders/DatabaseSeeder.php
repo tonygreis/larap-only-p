@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call(PaymentPlatformSeeder::class);
-        $this->call(CurrencySeeder::class);
+        $this->call(
+            CurrencySeeder::class
+        );
+        $this->call(PlanSeeder::class);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

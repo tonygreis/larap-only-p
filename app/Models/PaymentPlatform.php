@@ -9,5 +9,5 @@ class PaymentPlatform extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'image'];
+    protected $fillable = ['name', 'image', 'subscriptions_enabled'];
 }

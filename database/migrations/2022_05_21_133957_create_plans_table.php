@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment_platforms', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
-            $table->string('image');
-            $table->boolean('subscriptions_enabled')->default(false);
+            $table->string('slug')->unique();
+            $table->integer('price')->unsigned();
+            $table->integer('duration_in_days')->unsigned();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_platforms');
+        Schema::dropIfExists('plans');
     }
 };

@@ -13,24 +13,16 @@
                 </a>
             </x-slot>
 
-            <form method="POST" action="{{ route('pay') }}" id="paymentForm">
+            <form method="POST" action="{{ route('subscribe.store') }}" id="paymentForm">
                 @csrf
-                <div>
-                    <x-label for="value" :value="__('Value you want to pay')" />
-
-                    <x-input id="value" class="block mt-1 w-full" type="number" min="5" step="0.01" name="value"
-                        :value="old('value')" required autofocus />
-                </div>
-
-                <div>
-                    <x-label for="currency" :value="__('Currency')" />
-
-                    <select id="currency" name="currency"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @foreach ($currencies as $currency)
-                            <option value="{{ $currency->iso }}">{{ strtoupper($currency->iso) }}</option>
-                        @endforeach
-                    </select>
+                <div class="m-2 p-2">
+                    @foreach ($plans as $plan)
+                        <label>
+                            <input type="radio" name="plan" value="{{ $plan->slug }}">
+                            <p class="text-2xl font-bold text-blue-300">{{ $plan->slug }}</p>
+                            <p class="text-2xl font-bold text-blue-300">{{ $plan->visual_price }}</p>
+                        </label>
+                    @endforeach
                 </div>
                 <div x-data="{ tab: 'none' }">
                     <x-label for="platform" :value="__('Platform')" />
@@ -54,11 +46,6 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-end mt-4">
-
-                    @if (auth()->user()->hasActiveSubscription())
-                        <p>You get 10% off as part of your subscription.</p>
-                    @endif
-
                     <x-button id="payButton" class="ml-3">
                         {{ __('Pay') }}
                     </x-button>
