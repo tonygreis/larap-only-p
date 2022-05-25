@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function hasActiveSubscription()
     {
-        return optional($this->subscription)->isActive ?? false;
+        return optional($this->subscription)->isActive() ?? false;
     }
 }

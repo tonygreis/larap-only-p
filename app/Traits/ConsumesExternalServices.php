@@ -15,12 +15,13 @@ trait ConsumesExternalServices
         if (method_exists($this, 'resolveAuthorization')) {
             $this->resolveAuthorization($queryParams, $formParams, $headers);
         }
+
+
         $response = $client->request($method, $requestUrl, [
             $isJesonRequest ? 'json' : 'form_params' => $formParams,
             'headers' => $headers,
             'query' => $queryParams
         ]);
-
         $response = $response->getBody()->getContents();
 
         if (method_exists($this, 'decodeResponse')) {

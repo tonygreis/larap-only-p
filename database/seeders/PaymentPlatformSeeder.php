@@ -22,7 +22,8 @@ class PaymentPlatformSeeder extends Seeder
         ]);
         PaymentPlatform::create([
             'name' => 'Stripe',
-            'image' => 'img/stripe.jpg'
+            'image' => 'img/stripe.jpg',
+            'subscriptions_enabled' => true
         ]);
     }
 }

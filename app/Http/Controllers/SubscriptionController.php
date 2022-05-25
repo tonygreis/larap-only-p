@@ -32,9 +32,9 @@ class SubscriptionController extends Controller
             'payment_platform' => ['required', 'exists:payment_platforms,id'],
         ]);
 
+
         $paymentPlatform = $this->paymentPlatformResolver->resolveService($request->payment_platform);
         session()->put('subscriptionPlatformId', $request->payment_platform);
-
         return $paymentPlatform->handleSubscription($request);
     }
     public function approval(Request $request)

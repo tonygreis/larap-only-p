@@ -69,11 +69,13 @@ class PaypalService
 
     public function handleSubscription(Request $request)
     {
+
         $subscription = $this->createSubscription(
             $request->plan,
             $request->user()->name,
             $request->user()->email,
         );
+
 
         $subscriptionLinks = collect($subscription->links);
         $approve = $subscriptionLinks->where('rel', 'approve')->first();
@@ -139,6 +141,7 @@ class PaypalService
 
     public function createSubscription($planSlug, $name, $email)
     {
+
         return $this->makeRequest(
             'POST',
             '/v1/billing/subscriptions',
